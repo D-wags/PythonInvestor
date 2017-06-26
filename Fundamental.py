@@ -1,7 +1,25 @@
-
+# on vid 9
 import re
 import time
 import urllib.request
+
+def getRussell3000():
+    tickers = []
+    inFile = open("Russell3000.txt", "r").read()
+    lines = inFile.split("\n")
+
+    try:
+        for line in lines:
+            splitter = line.split(" ")
+            ticker = splitter[-1]
+            tickers.append(ticker)
+            print(ticker)
+
+    except Exception as e:
+        print(e)
+
+    return tickers
+
 
 Bakers = ['aqxp', 'ghdx', 'incy', 'amrn', 'blcm', 'bcrx', 'avxs', 'rigl', 'sgmo', 'anab', 'trvn']
 
@@ -25,6 +43,7 @@ def TickerStats(ticker):
 
             outFile = open("html_text.txt", 'w')
             outFile.write(sourceCode)
+            outFile.close()
 
             regex = 'Fz\(s\) Fw\(500\) Ta\(end\)" data-reactid="3[01][0-9]">'
             yrHi = sourceCode.split('52 Week High')
@@ -43,7 +62,10 @@ def TickerStats(ticker):
         print(ticker - " - Error!!")
         print(inst)
 
+
+getRussell3000()
+
 #TickerStats("idra")
-for stock in Bakers:
-    TickerStats(stock)
-    time.sleep(1)
+#for stock in Bakers:
+#    TickerStats(stock)
+#    time.sleep(1)
