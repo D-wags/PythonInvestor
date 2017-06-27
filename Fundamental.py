@@ -1,4 +1,4 @@
-# on vid 9
+# on vid 10
 import re
 import time
 import urllib.request
