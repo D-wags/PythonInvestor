@@ -1,7 +1,30 @@
-# on vid 10
+# on vid 13
+# dl idra monthly price data from yahoo saved as IDRA.csv for numpy
+
 import re
 import time
 import urllib.request
+import quandl
+
+
+# quandl name = bigdindacity
+# pass = Hi#po###
+# API key = "-pj7iy-RshhTAs4i2J89"
+
+def grabQuandl():
+
+    quandl.ApiConfig.api_version = '2015-04-09'
+    quandl.ApiConfig.api_key = "-pj7iy-RshhTAs4i2J89"
+
+
+    #mydata = quandl.get_table('ZACKS/FC', ticker='AAPL')
+    mydata = quandl.get("WIKI/IDRA", trim_start="2005-12-12")
+
+    # works data is a pandas dataframe I think
+    print (len(mydata))
+
+
+grabQuandl()
 
 def getRussell3000():
     tickers = []
@@ -63,7 +86,7 @@ def TickerStats(ticker):
         print(inst)
 
 
-getRussell3000()
+#getRussell3000()
 
 #TickerStats("idra")
 #for stock in Bakers:
