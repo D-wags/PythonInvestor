@@ -31,6 +31,16 @@ def grabQuandl():
 
 #grabQuandl()
 
+#will take data from quandl and plot it....
+def plotPrice(dates, prices):
+    dates, prices = np.loadtxt(netIncomeAr, delimiter=', ', unpack=True,
+                               converters={0: mdates.strpdate2num("%Y-%m-%d")})
+    fig = plt.figure()
+    ax1 = plt.subplot2grid((6,4), (0,0), rowspan=6, colspan=4)
+    ax1.plot(dates, prices)
+    plt.show()
+
+
 
 def getBakers():
     holdings = []
