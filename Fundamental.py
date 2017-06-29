@@ -2,10 +2,16 @@
 # dl idra monthly price data from yahoo saved as IDRA.csv for numpy
 
 import re
+import csv
 import time
 import urllib.request
 import quandl
 
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+import matplotlib.dates as mdates
 
 # quandl name = bigdindacity
 # pass = Hi#po###
@@ -23,8 +29,20 @@ def grabQuandl():
     # works data is a pandas dataframe I think
     print (len(mydata))
 
+#grabQuandl()
 
-grabQuandl()
+
+def getBakers():
+    holdings = []
+    with open('BBtransactions-2017-06-27_02_33_11.csv') as csvFile:
+        reader = csv.DictReader(csvFile)
+        for row in reader:
+            if float(row['Market Value']) > 0:
+                print(row['Symbol']+": Shares held:", row['Shares Held'], "Market Value:", row['Market Value'], "% Change:", row['% Change'])
+                holdings.append(row['Symbol'])
+    return holdings
+
+
 
 def getRussell3000():
     tickers = []
@@ -43,10 +61,9 @@ def getRussell3000():
 
     return tickers
 
+#Bakers = ['aqxp', 'ghdx', 'incy', 'amrn', 'blcm', 'bcrx', 'avxs', 'rigl', 'sgmo', 'anab', 'trvn']
 
-Bakers = ['aqxp', 'ghdx', 'incy', 'amrn', 'blcm', 'bcrx', 'avxs', 'rigl', 'sgmo', 'anab', 'trvn']
-
-# GET MARKET DATA
+# GET MARKET DATA on tickers
 def TickerStats(ticker):
 
     try:
@@ -85,8 +102,8 @@ def TickerStats(ticker):
         print(ticker - " - Error!!")
         print(inst)
 
-
-#getRussell3000()
+#Bakers = getBakers()
+# Russells = getRussell3000()
 
 #TickerStats("idra")
 #for stock in Bakers:
