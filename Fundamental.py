@@ -119,3 +119,8 @@ def TickerStats(ticker):
 #for stock in Bakers:
 #    TickerStats(stock)
 #    time.sleep(1)
+
+# draw graph
+plt.plot([1,2,3],[5,7,4])
+# show graph
+plt.show()
