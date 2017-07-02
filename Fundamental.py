@@ -1,11 +1,16 @@
-# on vid 13
+# on vid 14
 # dl idra monthly price data from yahoo saved as IDRA.csv for numpy
+# quandl name = bigdindacity
+# pass = Hi#po###
+# API key = "-pj7iy-RshhTAs4i2J89"
 
 import re
 import csv
+import os
 import time
 import urllib.request
 import quandl
+import pandas as pd
 
 import numpy as np
 import matplotlib
@@ -13,23 +18,61 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib.dates as mdates
 
-# quandl name = bigdindacity
-# pass = Hi#po###
-# API key = "-pj7iy-RshhTAs4i2J89"
 
 def grabQuandl():
 
     quandl.ApiConfig.api_version = '2015-04-09'
     quandl.ApiConfig.api_key = "-pj7iy-RshhTAs4i2J89"
 
-
     #mydata = quandl.get_table('ZACKS/FC', ticker='AAPL')
-    mydata = quandl.get("WIKI/IDRA", trim_start="2005-12-12")
+    mydata = quandl.get("WIKI/IDRA", trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
 
     # works data is a pandas dataframe I think
-    print (len(mydata))
+    #print (mydata["Adj. Close"], mydata["Date"])
 
 #grabQuandl()
+
+def stockPrices():
+    path = "/Users/Drew/Desktop/intraQuarter"
+    df = pd.DataFrame()
+    statspath = path+"_KeyStats"
+
+    stock_list = ["IDRA", "GILD"]
+    #stock_list = [x[0] for x in os.walk(statspath)]
+        #for each_dir in stock_list[1:]:
+    for stock in stock_list:
+        try:
+            ticker = stock
+            #print(ticker)
+            name = "WIKI/"+ticker.upper()
+            # mydata = quandl.get("WIKI/IDRA", trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
+            data = quandl.get(name, trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
+            data[ticker.upper()] = data["Adj. Close"]
+            df = pd.concat([df, data[ticker.upper()]], axis=1)
+
+        except Exception as e:
+            print(str(e))
+            time.sleep(10)
+
+            # try:
+            #     #ticker = each_dir.split("/")[1]
+            #     ticker = stock
+            #     print(ticker)
+            #     name = "WIKI/"+ticker.upper()
+            #     data = quandl.get(name, trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
+            #     data[ticker.upper()] = data["Adj. Close"]
+            #     df = pd.concat([df, data[ticker.upper()]], axis=1)
+            #
+            # except Exception as e:
+            #     print(str(e))
+    df.to_csv("stock_prices.csv")
+
+
+stockPrices()
+
+
+
+
 
 #will take data from quandl and plot it....
 def plotPrice(dates, prices):
@@ -120,7 +163,23 @@ def TickerStats(ticker):
 #    TickerStats(stock)
 #    time.sleep(1)
 
-# draw graph
-plt.plot([1,2,3],[5,7,4])
-# show graph
-plt.show()
+
+def makeGraph():
+    x = [1,2,3]
+    y = [5,7,4]
+
+    x2 = [1,2,3]
+    y2 = [10,14,12]
+
+    # draw graph
+    plt.plot(x,y, label="line1")
+    plt.plot(x2,y2,label="line2")
+
+
+    plt.xlabel("X Axis")
+    plt.ylabel("Y Axis")
+    plt.title("Random Ass Graph")
+    plt.legend()
+
+    # show graph
+    plt.show()
