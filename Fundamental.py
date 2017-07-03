@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib.dates as mdates
 
-
+#pull quandl data
 def grabQuandl():
 
     quandl.ApiConfig.api_version = '2015-04-09'
@@ -32,48 +32,55 @@ def grabQuandl():
 
 #grabQuandl()
 
+
+# Better quandl pull
 def stockPrices():
     path = "/Users/Drew/Desktop/intraQuarter"
     df = pd.DataFrame()
     statspath = path+"_KeyStats"
 
-    stock_list = ["IDRA", "GILD"]
+    errors = 0
+    stock_list = ["IDRA", "GILD", "SGEN"]
+
     #stock_list = [x[0] for x in os.walk(statspath)]
         #for each_dir in stock_list[1:]:
     for stock in stock_list:
         try:
             ticker = stock
-            #print(ticker)
             name = "WIKI/"+ticker.upper()
-            # mydata = quandl.get("WIKI/IDRA", trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
             data = quandl.get(name, trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
             data[ticker.upper()] = data["Adj. Close"]
+
             df = pd.concat([df, data[ticker.upper()]], axis=1)
+            print("SUCCESS")
 
         except Exception as e:
-            print(str(e))
+            errors +=1
+            print(str(e), str(errors))
             time.sleep(10)
 
-            # try:
-            #     #ticker = each_dir.split("/")[1]
-            #     ticker = stock
-            #     print(ticker)
-            #     name = "WIKI/"+ticker.upper()
-            #     data = quandl.get(name, trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
-            #     data[ticker.upper()] = data["Adj. Close"]
-            #     df = pd.concat([df, data[ticker.upper()]], axis=1)
-            #
-            # except Exception as e:
-            #     print(str(e))
     df.to_csv("stock_prices.csv")
 
+    # generate lists for plotting
+    # need to generalize this to be independent of array size; unpacking perhaps?
+    dates = []
+    s1 = []
+    s2 = []
+    s3 = []
 
-stockPrices()
+#IDRA,GILD,SGEN
+    with open('stock_prices.csv') as csvFile:
+        reader = csv.DictReader(csvFile)
+        for row in reader:
+            dates.append(row["Date"])
+            s1.append(row["IDRA"])
+            s2.append(row["GILD"])
+            s3.append(row["SGEN"])
+
+    return [dates, s1, s2, s3]
 
 
-
-
-
+# XX
 #will take data from quandl and plot it....
 def plotPrice(dates, prices):
     dates, prices = np.loadtxt(netIncomeAr, delimiter=', ', unpack=True,
@@ -84,7 +91,8 @@ def plotPrice(dates, prices):
     plt.show()
 
 
-
+# Function builds array of all BB holdings for HT analyis
+# Got BB transactions from whalewisdom?
 def getBakers():
     holdings = []
     with open('BBtransactions-2017-06-27_02_33_11.csv') as csvFile:
@@ -96,7 +104,7 @@ def getBakers():
     return holdings
 
 
-
+# Function builds array of all Russell3000 stocks for HT analyis
 def getRussell3000():
     tickers = []
     inFile = open("Russell3000.txt", "r").read()
@@ -114,9 +122,8 @@ def getRussell3000():
 
     return tickers
 
-#Bakers = ['aqxp', 'ghdx', 'incy', 'amrn', 'blcm', 'bcrx', 'avxs', 'rigl', 'sgmo', 'anab', 'trvn']
 
-# GET MARKET DATA on tickers
+# Function scrapes basic stock data from yahoo finance
 def TickerStats(ticker):
 
     try:
@@ -164,22 +171,22 @@ def TickerStats(ticker):
 #    time.sleep(1)
 
 
-def makeGraph():
-    x = [1,2,3]
-    y = [5,7,4]
-
-    x2 = [1,2,3]
-    y2 = [10,14,12]
+# Learning matplotlib
+#
+def makeGraph(dte, s1, s2):
 
     # draw graph
-    plt.plot(x,y, label="line1")
-    plt.plot(x2,y2,label="line2")
+    plt.plot(s1, s2, label="IDRA")
+    #plt.plot(str(dte),s2,label="SGEN")
 
-
-    plt.xlabel("X Axis")
-    plt.ylabel("Y Axis")
+    plt.xlabel("DATE")
+    plt.ylabel("PRICE($)")
     plt.title("Random Ass Graph")
     plt.legend()
 
     # show graph
     plt.show()
+
+
+threeStocks = stockPrices()
+makeGraph(threeStocks[0], threeStocks[1], threeStocks[2])
