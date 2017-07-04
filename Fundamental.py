@@ -1,4 +1,5 @@
-# on vid 14
+# on fun 14
+# on sci-kit 18
 # dl idra monthly price data from yahoo saved as IDRA.csv for numpy
 # quandl name = bigdindacity
 # pass = Hi#po###
@@ -175,8 +176,9 @@ def TickerStats(ticker):
 #
 def makeGraph(dte, s1, s2):
 
+    print(dte)
     # draw graph
-    plt.plot(s1, s2, label="IDRA")
+    plt.plot(dte, s2, label="IDRA")
     #plt.plot(str(dte),s2,label="SGEN")
 
     plt.xlabel("DATE")
