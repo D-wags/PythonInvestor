@@ -1,8 +1,9 @@
-# on fun 14
-# on sci-kit 18
+
 # dl idra monthly price data from yahoo saved as IDRA.csv for numpy
 # quandl name = bigdindacity
 # pass = Hi#po###
+# on fun 14
+# on sci-kit 18
 # API key = "-pj7iy-RshhTAs4i2J89"
 
 import re
@@ -28,7 +29,7 @@ def grabQuandl():
     #mydata = quandl.get_table('ZACKS/FC', ticker='AAPL')
     mydata = quandl.get("WIKI/IDRA", trim_start="2005-12-12", authtoken="-pj7iy-RshhTAs4i2J89")
 
-    # works data is a pandas dataframe I think
+    #data is a pandas dataframe
     #print (mydata["Adj. Close"], mydata["Date"])
 
 #grabQuandl()
@@ -43,8 +44,6 @@ def stockPrices():
     errors = 0
     stock_list = ["IDRA", "GILD", "SGEN"]
 
-    #stock_list = [x[0] for x in os.walk(statspath)]
-        #for each_dir in stock_list[1:]:
     for stock in stock_list:
         try:
             ticker = stock
@@ -172,8 +171,6 @@ def TickerStats(ticker):
 #    time.sleep(1)
 
 
-# Learning matplotlib
-#
 def makeGraph(dte, s1, s2):
 
     print(dte)
@@ -183,7 +180,7 @@ def makeGraph(dte, s1, s2):
 
     plt.xlabel("DATE")
     plt.ylabel("PRICE($)")
-    plt.title("Random Ass Graph")
+    plt.title("Price vs Time")
     plt.legend()
 
     # show graph
@@ -191,4 +188,4 @@ def makeGraph(dte, s1, s2):
 
 
 threeStocks = stockPrices()
-makeGraph(threeStocks[0], threeStocks[1], threeStocks[2])
+#makeGraph(threeStocks[0], threeStocks[1], threeStocks[2])
